@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>৩য় শ্রেণির ইন্টারেক্টিভ সাজেশন</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #FDFDFB;
+        }
+        .tab-btn.active {
+            background-color: #34495E;
+            color: white;
+            border-color: #34495E;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mcq-option.correct {
+            background-color: #2ECC71 !important;
+            color: white;
+            border-color: #27AE60 !important;
+        }
+        .mcq-option.incorrect {
+            background-color: #E74C3C !important;
+            color: white;
+            border-color: #C0392B !important;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-700">সাভার ক্যান্টনমেন্ট বোর্ড বালিকা উচ্চ বিদ্যালয়</h1>
+            <p class="text-xl md:text-2xl text-gray-600 mt-2">২য় প্রান্তিক মূল্যায়ন - ২০২৫</p>
+            <p class="text-lg text-gray-500">ইন্টারেক্টিভ সাজেশন</p>
+        </header>
+
+        <nav id="tabs" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+        </nav>
+
+        <main id="content-area">
+        </main>
+
+    </div>
+
+    <script>
+        const suggestionData = {
+            bangla: {
+                title: "বাংলা",
+                content: {
+                    "কবিতা": [
+                        { q: "<b>ক. হাসি</b><br><b>কবি:</b> রোকনুজ্জামান খান", a: "এই তো দ্যাখো ফুল ফুটেছে, এই তো ফুটে খই,<br>খুকুর হাসি এমন কেন? বল তো দেখি সই।<br>খুকুর হাসির তুলন পাওয়া ভার।<br>খুকুর হাসি রূপের রাশি, যেন মানিক হার।<br>খুকুর যখন ঘুম ভাঙে ওই সকাল বেলার ভোরে,<br>মায়ের মুখে চুম দিয়ে সে হাসে যে মুখ ভরে।<br>সেই সে হাসির রঙ লেগেছে ভোরের দুটি গালে,<br>তাই তো রবি সোনার হাসি হাসে সকাল কালে।" },
+                        { q: "<b>খ. আমাদের গ্রাম</b><br><b>কবি:</b> বন্দে আলী মিয়া", a: "আমাদের ছোট গাঁয়ে ছোট ছোট ঘর,<br>থাকি সেথা সবে মিলে নাহি কেহ পর।<br>পাড়ার সকল ছেলে মোরা ভাই ভাই,<br>এক সাথে খেলি আর পাঠশালে যাই।<br>হিংসা ও মারামারি কভু নাহি করি,<br>পিতামাতা গুরুজনে সদা মোরা ডরি।<br>আমাদের ছোট গ্রাম মায়ের সমান,<br>আলো দিয়ে, বায়ু দিয়ে বাঁচাইছে প্রাণ।" }
+                    ],
+                    "সংক্ষিপ্ত প্রশ্নোত্তর": [
+                        { q: "ক. কোন নদীর ইলিশ বিখ্যাত?", a: "পদ্মা নদীর ইলিশ বিখ্যাত।" },
+                        { q: "খ. কী কারণে নদীর পানি দূষিত হয়?", a: "কলকারখানার বর্জ্য, গৃহস্থালির আবর্জনা এবং কৃষিক্ষেত্রে ব্যবহৃত রাসায়নিক সার ও কীটনাশক পানিতে মেশার কারণে নদীর পানি দূষিত হয়।" },
+                        { q: "গ. ছোটো ছোটো গ্রামে সবাই কীভাবে থাকে?", a: "ছোটো ছোটো গ্রামে সবাই মিলেমিশে একসাথে ভাইয়ের মতো থাকে।" }
+                    ],
+                    "শব্দার্থ": [
+                        { q: "দায়িত্ব", a: "কর্তব্য, ভার" },
+                        { q: "প্রাচীন", a: "পুরাতন, অনেক আগের" },
+                        { q: "বিখ্যাত", a: "নামকরা, প্রসিদ্ধ" }
+                    ],
+                    "বাক্য গঠন": [
+                        { q: "জাদুঘর", a: "আমরা জাদুঘরে অনেক পুরনো জিনিস দেখেছি।" },
+                        { q: "পাঠশালা", a: "গ্রামের শিশুরা একসাথে পাঠশালায় যায়।" },
+                        { q: "মিলেমিশে", a: "আমরা সবাই মিলেমিশে থাকি।" }
+                    ],
+                    "বহুনির্বাচনি প্রশ্ন": [
+                        { q: "১. ঘণ্টা বাজাতেই কে ক্লাসে এলেন?", options: ["রাজু", "খুশি আপা", "মিতু", "সুমাইয়া"], a: "খুশি আপা" },
+                        { q: "২. ঘুরতে যাওয়ার নির্ধারিত দিনটি কি বার ছিল?", options: ["শনিবার", "রবিবার", "সোমবার", "মঙ্গলবার"], a: "রবিবার" },
+                        { q: "৫. কবি গ্রামকে তুলনা করেছেন-", options: ["মায়ের সাথে", "বোনের সাথে", "চাচার সাথে", "খালার সাথে"], a: "মায়ের সাথে" }
+                    ]
+                }
+            },
+            science: {
+                title: "বিজ্ঞান",
+                content: {
+                    "বহুনির্বাচনি প্রশ্ন": [
+                        { q: "১. কোনটি তরল পদার্থের বৈশিষ্ট্য নয়?", options: ["ওজন আছে", "নির্দিষ্ট ওজন আছে", "নির্দিষ্ট আকার আছে", "নির্দিষ্ট আয়তন আছে"], a: "নির্দিষ্ট আকার আছে" },
+                        { q: "২. পদার্থের অবস্থা কয়টি?", options: ["১টি", "২টি", "৩টি", "৪টি"], a: "৩টি" },
+                        { q: "৬. কোনটি শক্তি?", options: ["টেলিভিশন", "ফ্যান", "আলো", "কলম"], a: "আলো" },
+                        { q: "৮. নিচের কোনটি থেকে বিদ্যুৎ পাওয়া যায়?", options: ["বায়ু", "মাটি", "কাঠ", "ব্যাটারি"], a: "ব্যাটারি" }
+                    ],
+                    "শূন্যস্থান পূরণ": [
+                        { q: "ক. লৌহ জাতীয় পদার্থ এক ধরণের ______ পদার্থ।", a: "চৌম্বক" },
+                        { q: "খ. প্রকৃতিতে পানি ______ অবস্থায় থাকে।", a: "তিন" },
+                        { q: "গ. সূর্য থেকে আমরা সবচেয়ে বেশি ______ পাই।", a: "তাপশক্তি" }
+                    ],
+                    "সংক্ষেপে উত্তর দাও": [
+                        { q: "ক. অচৌম্বক পদার্থ বলতে কি বোঝায়?", a: "যেসব পদার্থ চুম্বক দ্বারা আকৃষ্ট হয় না, তাদের অচৌম্বক পদার্থ বলে। যেমন - প্লাস্টিক, কাঠ, কাচ ইত্যাদি।" },
+                        { q: "ঘ. তরল পদার্থ কাকে বলে?", a: "যে পদার্থের নির্দিষ্ট আয়তন আছে কিন্তু নির্দিষ্ট আকার নেই, তাকে তরল পদার্থ বলে। একে যে পাত্রে রাখা হয়, সেই পাত্রের আকার ধারণ করে।" }
+                    ]
+                }
+            },
+            math: {
+                title: "গণিত",
+                content: {
+                    "বহুনির্বাচনি প্রশ্ন": [
+                        { q: "১. গুণের বিপরীত প্রক্রিয়া কোনটি?", options: ["যোগ", "বিয়োগ", "গুন", "ভাগ"], a: "ভাগ" },
+                        { q: "২. যে সংখ্যা দিয়ে ভাগ করা হয় তাকে কী বলে?", options: ["ভাগফল", "ভাজক", "ভাজ্য", "ভাগশেষ"], a: "ভাজক" },
+                        { q: "৪. ১টি ৪৮ মিটার ফিতার ৮ ভাগের ১ ভাগ অনুকে দেওয়া হলো। অনু কত মিটার ফিতা পেল?", options: ["৪৮ মিটার", "৬ মিটার", "১২ মিটার", "৮ মিটার"], a: "৬ মিটার" }
+                    ],
+                    "সংক্ষিপ্ত প্রশ্ন": [
+                        { q: "১. ৫টি ডিমের দাম ৭৫ টাকা হলে, ১টি ডিমের দাম কত?", a: "১টি ডিমের দাম = ৭৫ ÷ ৫ = ১৫ টাকা।" },
+                        { q: "২. ভাজক কাকে বলে?", a: "যে সংখ্যা দিয়ে ভাগ করা হয়, তাকে ভাজক বলে।" },
+                        { q: "৭. সমতুল ভগ্নাংশ কাকে বলে?", a: "একাধিক ভগ্নাংশের মান সমান হলে, তাদেরকে একে অপরের সমতুল ভগ্নাংশ বলে।" }
+                    ],
+                    "বড় প্রশ্ন": [
+                        { q: "১. ৮ টি আম দুইজনকে সমান ভাগে ভাগ করে দেওয়া হলে, প্রত্যেকে কয়টি করে আম পাবে?", a: "প্রত্যেকে পাবে = ৮ ÷ ২ = ৪টি করে আম।" },
+                        { q: "৩. ১টি তাকে ৪২ টি বই রাখা যায়। এরুপ ২টি তাক ভর্তি বই আছে। এছাড়া আরও ৮ টি বই আছে। মোট কতগুলো বই আছে?", a: "২টি তাকে বই আছে = ৪২ × ২ = ৮৪টি।<br>মোট বই আছে = ৮৪ + ৮ = ৯২টি।" }
+                    ]
+                }
+            },
+            islam: {
+                title: "ইসলাম শিক্ষা",
+                content: {
+                    "বহুনির্বাচনি প্রশ্ন": [
+                        { q: "১. মহানবি হযরত মুহাম্মদ (স.) কত খ্রিষ্টাব্দে জন্মগ্রহণ করেন?", options: ["৫৬০ খ্রিঃ", "৫৭০ খ্রিঃ", "৫৮০ খ্রিঃ", "৫৯০ খ্রিঃ"], a: "৫৭০ খ্রিঃ" },
+                        { q: "৫. ইসলামের প্রথম খলিফা কে ছিলেন?", options: ["হযরত আবু বকর (র)", "হযরত উমর (র)", "হযরত উসমান (র)", "হযরত আলী (র)"], a: "হযরত আবু বকর (র)" },
+                        { q: "৭. আখলাক শব্দের অর্থ কী?", options: ["চরিত্র", "সত্যবাদী", "পরোপকারী", "সাহায্যকারী"], a: "চরিত্র" }
+                    ],
+                    "সংক্ষিপ্ত প্রশ্ন": [
+                        { q: "ক. হিলফুল ফুযুল কী?", a: "আরব সমাজে শান্তি প্রতিষ্ঠার জন্য গঠিত একটি সংগঠন।" },
+                        { q: "গ. মহানবী (স.) কে আল-আমিন বলা হতো কেন?", a: "তাঁর সততা, বিশ্বাসযোগ্যতা ও আমানতদারিতার জন্য তাঁকে আল-আমিন বা বিশ্বাসী বলা হতো।" }
+                    ]
+                }
+            },
+            bgs: {
+                title: "বাংলাদেশ ও বিশ্বপরিচয়",
+                content: {
+                    "বহুনির্বাচনি প্রশ্ন": [
+                        { q: "১. জনসংখ্যার ভিত্তিতে বাংলা ভাষার স্থান কততম?", options: ["৩য়", "৪র্থ", "৫ম", "৬ষ্ঠ"], a: "৬ষ্ঠ" },
+                        { q: "৬. বাংলাদেশ কোন মহাদেশে অবস্থিত?", options: ["আমেরিকা", "ওশেনিয়া", "এশিয়া", "আফ্রিকা"], a: "এশিয়া" },
+                        { q: "১০. মা-বাবা, ভাই-বোন নিয়ে গঠিত হয়?", options: ["পরিবার", "সমাজ", "দেশ", "রাষ্ট্র"], a: "পরিবার" }
+                    ],
+                    "অল্প কথায় উত্তর": [
+                        { q: "ক. সাংস্কৃতিক উপাদান গুলো কী কী?", a: "ভাষা, পোশাক, খাবার, উৎসব, সংগীত, নৃত্য ইত্যাদি সাংস্কৃতিক উপাদান।" },
+                        { q: "ঙ. পরিবার কীভাবে গঠিত হয়?", a: "বাবা-মা, ভাই-বোন এবং অন্যান্য আত্মীয়-স্বজন নিয়ে পরিবার গঠিত হয়।" }
+                    ]
+                }
+            }
+        };
+
+        const tabsContainer = document.getElementById('tabs');
+        const contentArea = document.getElementById('content-area');
+        let currentChart = null;
+        let activeTab = 'bangla';
+
+        function init() {
+            Object.keys(suggestionData).forEach(key => {
+                const tabBtn = document.createElement('button');
+                tabBtn.className = 'tab-btn px-4 py-2 text-sm md:text-base font-semibold border-2 border-gray-300 rounded-full transition-colors duration-300 hover:bg-gray-200';
+                tabBtn.textContent = suggestionData[key].title;
+                tabBtn.dataset.tab = key;
+                tabsContainer.appendChild(tabBtn);
+            });
+
+            tabsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tab-btn')) {
+                    activeTab = e.target.dataset.tab;
+                    renderContent(activeTab);
+                }
+            });
+            renderContent(activeTab);
+        }
+
+        function renderContent(tabKey) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabKey);
+            });
+
+            const subject = suggestionData[tabKey];
+            contentArea.innerHTML = '';
+
+            const subjectContainer = document.createElement('div');
+            subjectContainer.className = 'bg-white p-4 md:p-6 rounded-lg shadow-md';
+            
+            const chartContainerWrapper = document.createElement('div');
+            chartContainerWrapper.className = 'mb-8';
+            chartContainerWrapper.innerHTML = `
+                <h2 class="text-2xl font-bold text-center mb-4 text-gray-700">প্রশ্নাবলীর ধরণ</h2>
+                <div class="chart-container">
+                    <canvas id="contentChart"></canvas>
+                </div>
+            `;
+            subjectContainer.appendChild(chartContainerWrapper);
+
+            Object.entries(subject.content).forEach(([category, items]) => {
+                const accordionContainer = document.createElement('div');
+                accordionContainer.className = 'mb-4 border border-gray-200 rounded-lg';
+
+                const accordionButton = document.createElement('button');
+                accordionButton.className = 'w-full p-4 text-left bg-gray-100 hover:bg-gray-200 focus:outline-none transition-colors duration-300 font-bold text-lg flex justify-between items-center';
+                accordionButton.innerHTML = `<span>${category}</span><span class="transform transition-transform duration-300">▼</span>`;
+                
+                const accordionContent = document.createElement('div');
+                accordionContent.className = 'accordion-content p-4 border-t border-gray-200';
+
+                items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'mb-6 p-4 bg-blue-50/50 rounded-md';
+                    
+                    if (item.options) { // MCQ
+                        itemDiv.innerHTML = `<p class="font-semibold mb-3">${item.q}</p>`;
+                        const optionsList = document.createElement('div');
+                        optionsList.className = 'flex flex-col space-y-2';
+                        item.options.forEach(opt => {
+                            const optionBtn = document.createElement('button');
+                            optionBtn.className = 'mcq-option p-2 border-2 border-gray-300 rounded-md text-left hover:bg-gray-100 transition-colors duration-200';
+                            optionBtn.textContent = opt;
+                            optionBtn.onclick = () => {
+                                document.querySelectorAll('.mcq-option').forEach(b => {
+                                    b.disabled = true;
+                                });
+                                optionBtn.disabled = true;
+                                if (opt === item.a) {
+                                    optionBtn.classList.add('correct');
+                                } else {
+                                    optionBtn.classList.add('incorrect');
+                                    optionsList.querySelectorAll('.mcq-option').forEach(btn => {
+                                        if (btn.textContent === item.a) {
+                                            btn.classList.add('correct');
+                                        }
+                                    });
+                                }
+                            };
+                            optionsList.appendChild(optionBtn);
+                        });
+                        itemDiv.appendChild(optionsList);
+                    } else { // Q&A
+                        itemDiv.innerHTML = `<p class="font-semibold mb-2">${item.q}</p>`;
+                        const answerDiv = document.createElement('div');
+                        answerDiv.className = 'hidden mt-2 text-green-700 font-medium';
+                        answerDiv.innerHTML = item.a;
+
+                        const showAnswerBtn = document.createElement('button');
+                        showAnswerBtn.className = 'px-3 py-1 bg-gray-600 text-white rounded-md text-sm hover:bg-gray-700 transition-colors';
+                        showAnswerBtn.textContent = 'উত্তর দেখুন';
+                        showAnswerBtn.onclick = () => {
+                            answerDiv.classList.toggle('hidden');
+                            showAnswerBtn.textContent = answerDiv.classList.contains('hidden') ? 'উত্তর দেখুন' : 'উত্তর লুকান';
+                        };
+                        itemDiv.appendChild(showAnswerBtn);
+                        itemDiv.appendChild(answerDiv);
+                    }
+                    accordionContent.appendChild(itemDiv);
+                });
+
+                accordionButton.addEventListener('click', () => {
+                    accordionButton.querySelector('span:last-child').classList.toggle('rotate-180');
+                    const content = accordionButton.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+                
+                accordionContainer.appendChild(accordionButton);
+                accordionContainer.appendChild(accordionContent);
+                subjectContainer.appendChild(accordionContainer);
+            });
+            
+            contentArea.appendChild(subjectContainer);
+            updateChart(subject);
+        }
+
+        function updateChart(subjectData) {
+            const ctx = document.getElementById('contentChart').getContext('2d');
+            const labels = Object.keys(subjectData.content);
+            const data = labels.map(label => subjectData.content[label].length);
+
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'প্রশ্নের সংখ্যা',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(26, 188, 156, 0.6)',
+                            'rgba(52, 152, 219, 0.6)',
+                            'rgba(155, 89, 182, 0.6)',
+                            'rgba(241, 196, 15, 0.6)',
+                            'rgba(230, 126, 34, 0.6)',
+                            'rgba(231, 76, 60, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(26, 188, 156, 1)',
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)',
+                            'rgba(230, 126, 34, 1)',
+                            'rgba(231, 76, 60, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
